@@ -1,12 +1,12 @@
 use std::error::Error;
 
-use image::{Rgb, RgbImage};
+use image::{Rgb, Rgba, RgbaImage};
 use palette::Srgb;
 
 pub struct BackgroundConfig<'a> {
-    width: u32,
-    height: u32,
-    color: &'a str,
+    pub width: u32,
+    pub height: u32,
+    pub color: &'a str,
 }
 
 pub fn create_bg_image(
@@ -14,11 +14,15 @@ pub fn create_bg_image(
         width,
         height,
         color,
-    }: BackgroundConfig,
-) -> Result<RgbImage, Box<dyn Error>> {
+    }: &BackgroundConfig,
+) -> Result<RgbaImage, Box<dyn Error>> {
     let color: Srgb<u8> = color.parse()?;
 
-    let bg_image = RgbImage::from_pixel(width, height, Rgb([color.red, color.green, color.blue]));
+    let bg_image = RgbaImage::from_pixel(
+        *width,
+        *height,
+        Rgba([color.red, color.green, color.blue, 255]),
+    );
 
     Ok(bg_image)
 }
