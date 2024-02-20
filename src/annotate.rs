@@ -14,7 +14,7 @@ pub fn create_annotation(text: &str, width: u32, height: u32) -> Result<RgbaImag
     height="{height}px"
     viewbox="0 0 {width} {height}" 
     >
-    <text y="50%" font-family="Noto Sans">{text}</text>
+    <text x="50%" y="50%" font-family="Noto Sans" font-size="32" text-anchor="middle">{text}</text>
     </svg>
             "#
         ),

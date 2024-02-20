@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use image::{Rgb, Rgba, RgbaImage};
+use image::{Rgba, RgbaImage};
 use palette::Srgb;
 
 pub struct BackgroundConfig<'a> {

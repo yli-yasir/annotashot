@@ -13,9 +13,9 @@ pub fn read_screenshot_image(
         width,
         height,
         file_path,
-    }: ScreenshotConfig,
+    }: &ScreenshotConfig,
 ) -> Result<RgbaImage, Box<dyn Error>> {
     Ok(image::open(file_path)?
-        .resize(width, height, FilterType::Gaussian)
+        .resize_exact(*width, *height, FilterType::Gaussian)
         .to_rgba8())
 }
