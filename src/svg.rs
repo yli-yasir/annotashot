@@ -4,7 +4,7 @@ use image::RgbaImage;
 use once_cell::sync::Lazy;
 use resvg::{
     tiny_skia::Pixmap,
-    usvg::{self, fontdb, PostProcessingSteps, XmlOptions},
+    usvg::{self, fontdb, PostProcessingSteps},
 };
 
 static FONT_DB: Lazy<usvg::fontdb::Database> = Lazy::new(|| {

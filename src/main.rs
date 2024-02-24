@@ -1,7 +1,8 @@
-use std::process;
-
-use annotate_screenshot::{background::BackgroundConfig, screenshot::ScreenshotConfig};
+use annotate_screenshot::{
+    annotate::AnnotationConfig, background::BackgroundConfig, screenshot::ScreenshotConfig,
+};
 use clap::Parser;
+use std::process;
 
 fn main() {
     let Args {
@@ -10,8 +11,10 @@ fn main() {
         background_height,
         screenshot_width,
         screenshot_height,
-        annotation,
         screenshot,
+        annotation,
+        annotation_font,
+        annotation_font_size,
     } = Args::parse();
 
     if let Err(e) = annotate_screenshot::run(
@@ -24,6 +27,13 @@ fn main() {
             width: screenshot_width,
             height: screenshot_height,
             file_path: &screenshot,
+        },
+        AnnotationConfig {
+            width: background_width,
+            height: background_height,
+            text: &annotation.replace("\\n", "\n"),
+            font_size: annotation_font_size,
+            font: &annotation_font,
         },
     ) {
         eprintln!("Error: {e}");
@@ -54,4 +64,10 @@ pub struct Args {
 
     #[arg(long)]
     annotation: String,
+
+    #[arg(long)]
+    annotation_font: String,
+
+    #[arg(long)]
+    annotation_font_size: u32,
 }
