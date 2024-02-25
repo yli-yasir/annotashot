@@ -21,17 +21,22 @@ pub fn run(
     imageops::overlay(
         &mut background,
         &screenshot,
-        center_coord(background_config.width, screenshot.width()).into(),
-        (background_config.height / 2).into(),
+        shift_origin_to_center(
+            background_config.width as f64 * screenshot_config.x,
+            screenshot_config.resize_width,
+        ),
+        shift_origin_to_center(
+            background_config.height as f64 * screenshot_config.y,
+            screenshot_config.resize_height,
+        ),
     );
 
     imageops::overlay(&mut background, &annotation, 0, 0);
 
-    annotation.save_with_format("anno.png", ImageFormat::Png);
     background.save_with_format("background.png", ImageFormat::Png);
     return Ok(());
 }
 
-fn center_coord(parent_length: u32, child_length: u32) -> u32 {
-    (parent_length - child_length) / 2
+fn shift_origin_to_center(coord: f64, side_length: u32) -> i64 {
+    (coord - side_length as f64 / 2.0).round() as i64
 }
