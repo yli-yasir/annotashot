@@ -1,6 +1,11 @@
-use std::error::Error;
+use std::{
+    error::Error,
+    fs::File,
+    io::{Read, Write},
+    path::Path,
+};
 
-use image::RgbaImage;
+use image::{Rgba, RgbaImage};
 use once_cell::sync::Lazy;
 use resvg::{
     tiny_skia::Pixmap,
@@ -45,11 +50,13 @@ viewbox="0 0 {width} {height}"
     let mut pixmap = Pixmap::new(width, height).expect("Failed to create pixmap!");
     resvg::render(&svg_tree, usvg::Transform::identity(), &mut pixmap.as_mut());
 
-    pixmap.save_png("pixmap.png");
-    let raster_image = RgbaImage::from_raw(width, height, pixmap.data().to_vec())
-        .expect("Failed to convert pixmap to raster!");
+    println!("{:?}", pixmap.pixel(395, 241).unwrap().demultiply());
+    let raster_image = RgbaImage::from_fn(width, height, |x, y| {
+        let p = pixmap.pixel(x, y).unwrap().demultiply();
+        Rgba([p.red(), p.green(), p.blue(), p.alpha()])
+    });
+
     raster_image.save_with_format("afterpixmap.png", image::ImageFormat::Png);
-    raster_image.save_with_format("afterpixmap.jpg", image::ImageFormat::Jpeg);
 
     Ok(raster_image)
 }

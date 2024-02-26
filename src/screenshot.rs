@@ -42,7 +42,7 @@ pub fn read_screenshot_image(
 
     let mask = render_svg(
         r#"
-    <rect width="100%" height="100%" rx="5%" />
+    <rect width="100%" height="100%" rx="7%" />
     "#,
         image.width(),
         image.height(),
