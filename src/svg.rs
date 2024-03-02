@@ -1,16 +1,10 @@
-use std::{
-    error::Error,
-    fs::File,
-    io::{Read, Write},
-    path::Path,
-};
-
 use image::{Rgba, RgbaImage};
 use once_cell::sync::Lazy;
 use resvg::{
     tiny_skia::Pixmap,
     usvg::{self, fontdb, PostProcessingSteps},
 };
+use std::error::Error;
 
 static FONT_DB: Lazy<usvg::fontdb::Database> = Lazy::new(|| {
     let mut font_db = fontdb::Database::new();
@@ -19,7 +13,7 @@ static FONT_DB: Lazy<usvg::fontdb::Database> = Lazy::new(|| {
 });
 
 pub fn render_svg(
-    inner_svg_elements: &str,
+    inner_svg_elements: String,
     width: u32,
     height: u32,
 ) -> Result<RgbaImage, Box<dyn Error>> {
@@ -55,8 +49,6 @@ viewbox="0 0 {width} {height}"
         let p = pixmap.pixel(x, y).unwrap().demultiply();
         Rgba([p.red(), p.green(), p.blue(), p.alpha()])
     });
-
-    raster_image.save_with_format("afterpixmap.png", image::ImageFormat::Png);
 
     Ok(raster_image)
 }

@@ -1,7 +1,8 @@
-use annotate::{create_annotation, AnnotationConfig};
-use background::{create_bg_image, BackgroundConfig};
-use image::{imageops, ImageFormat};
-use screenshot::{read_screenshot_image, ScreenshotConfig};
+use ::image::{imageops, ImageFormat};
+use annotate::AnnotationConfig;
+use background::BackgroundConfig;
+use image::RgbaImage;
+use screenshot::{Screenshot, ScreenshotConfig};
 use std::error::Error;
 
 pub mod annotate;
@@ -10,33 +11,28 @@ pub mod screenshot;
 pub mod svg;
 
 pub fn run(
+    out_file_name: String,
     background_config: BackgroundConfig,
     screenshot_config: ScreenshotConfig,
     annotation_config: AnnotationConfig,
 ) -> Result<(), Box<dyn Error>> {
-    let mut background = create_bg_image(&background_config)?;
-    let screenshot = read_screenshot_image(&screenshot_config)?;
-    let annotation = create_annotation(&annotation_config)?;
+    let mut canvas = RgbaImage::try_from(background_config)?;
+    let annotation = RgbaImage::try_from(annotation_config)?;
+    let screenshot = Screenshot::new(screenshot_config)?;
+
+    let canvas_width = canvas.width();
+    let canvas_height = canvas.height();
 
     imageops::overlay(
-        &mut background,
-        &screenshot,
-        shift_origin_to_center(
-            background_config.width as f64 * screenshot_config.x,
-            screenshot_config.resize_width,
-        ),
-        shift_origin_to_center(
-            background_config.height as f64 * screenshot_config.y,
-            screenshot_config.resize_height,
-        ),
+        &mut canvas,
+        screenshot.image(),
+        screenshot.x_coord(canvas_width),
+        screenshot.y_coord(canvas_height),
     );
 
-    imageops::overlay(&mut background, &annotation, 0, 0);
+    imageops::overlay(&mut canvas, &annotation, 0, 0);
 
-    background.save_with_format("background.png", ImageFormat::Png);
+    canvas.save_with_format(out_file_name, ImageFormat::Png)?;
+
     return Ok(());
-}
-
-fn shift_origin_to_center(coord: f64, side_length: u32) -> i64 {
-    (coord - side_length as f64 / 2.0).round() as i64
 }
