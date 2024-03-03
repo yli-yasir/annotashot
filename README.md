@@ -1,4 +1,4 @@
-Annoshot
+Annotashot
 
 ```
 cargo run --\
@@ -16,7 +16,7 @@ cargo run --\
  --screenshot-crop-bottom 0.04\
  --screenshot-crop-left 0\
  --annotation-text "The game is\n to solve a\nunique problem"\
- --annotation-font "Shantell Sans"\
+ --annotation-font "Permanent Marker"\
  --annotation-font-size 64\
  --annotation-font-color 000000\
  --annotation-x 0.5\

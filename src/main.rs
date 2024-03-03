@@ -1,4 +1,4 @@
-use annotate_screenshot::{
+use annotashot::{
     annotate::AnnotationConfig, background::BackgroundConfig, screenshot::ScreenshotConfig,
 };
 use clap::Parser;
@@ -27,7 +27,7 @@ fn main() {
         annotation_font_color,
     } = Args::parse();
 
-    if let Err(e) = annotate_screenshot::run(
+    if let Err(e) = annotashot::run(
         out_file_name,
         BackgroundConfig {
             width: background_width,
