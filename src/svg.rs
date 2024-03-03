@@ -17,7 +17,6 @@ pub fn render_svg(
     width: u32,
     height: u32,
 ) -> Result<RgbaImage, Box<dyn Error>> {
-    println!("{inner_svg_elements}");
     let mut svg_tree = usvg::Tree::from_str(
         &format!(
             r#"
@@ -44,7 +43,6 @@ viewbox="0 0 {width} {height}"
     let mut pixmap = Pixmap::new(width, height).expect("Failed to create pixmap!");
     resvg::render(&svg_tree, usvg::Transform::identity(), &mut pixmap.as_mut());
 
-    println!("{:?}", pixmap.pixel(395, 241).unwrap().demultiply());
     let raster_image = RgbaImage::from_fn(width, height, |x, y| {
         let p = pixmap.pixel(x, y).unwrap().demultiply();
         Rgba([p.red(), p.green(), p.blue(), p.alpha()])

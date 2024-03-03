@@ -85,16 +85,15 @@ impl Screenshot {
         &self.image
     }
 
-    pub fn x_coord(&self, side_length: u32) -> i64 {
-        Self::coord_origin_center(self.x, side_length)
+    pub fn x_coord(&self, world_width: u32) -> i64 {
+        Self::coord_origin_center(self.x, self.image.width(), world_width)
     }
 
-    pub fn y_coord(&self, side_length: u32) -> i64 {
-        Self::coord_origin_center(self.y, side_length)
+    pub fn y_coord(&self, world_height: u32) -> i64 {
+        Self::coord_origin_center(self.y, self.image.height(), world_height)
     }
 
-    fn coord_origin_center(coord_ratio: f64, side_length: u32) -> i64 {
-        let side_length = side_length as f64;
-        (side_length * coord_ratio - side_length / 2.0).round() as i64
+    fn coord_origin_center(coord_ratio: f64, side_length: u32, world_length: u32) -> i64 {
+        (world_length as f64 * coord_ratio - side_length as f64 / 2.0).round() as i64
     }
 }

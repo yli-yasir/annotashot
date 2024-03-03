@@ -33,16 +33,16 @@ impl TryFrom<AnnotationConfig> for RgbaImage {
             .enumerate()
             .fold(String::new(), |acc, (i, line)| {
                 format!(
-                    r##"\
-{acc}\
- <text x="{x_percent}%"\
- y="{y_percent:.2}%"\
- font-family="{font}"\
- font-size="{font_size}"\
- fill="#{font_color}"\
- text-anchor="middle">\
- {line}\
- </text>\
+                    r##"
+{acc}
+<text x="{x_percent:.2}%"
+y="{y_percent:.2}%"
+font-family="{font}"
+font-size="{font_size}"
+fill="#{font_color}"
+text-anchor="middle">
+{line}
+</text>
  "##,
                     x_percent = x * 100.0,
                     y_percent = line_y_offset_percent(height, y, i, font_size)
